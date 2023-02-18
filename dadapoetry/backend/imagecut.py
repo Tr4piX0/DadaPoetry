@@ -3,14 +3,22 @@ from pytesseract import pytesseract
 from random import randint
 import os
 
-path_img = '/home/arnaldo/Imagens/imgs/'
 
-def poetry(text):
-    complete = []
-    len_text = len(text)
-    if len_text >= 29:
+class Poetry(path):
+    def cut(self):
+        img = Image.open(self.path)
+        text = pytesseract.image_to_string(img)
+        return text
+
+    def structure(self, strophes=4):
+        if strophes < 4:
+            print("your image \n does \n not contain enough \n \
+                  words for a poetry")
+
+        text = self.cut.split(' ')
         words = []
-        poetry_structure =[
+        poetry = ''
+        poetry_structure = [
             0, 1, 2, 3, '\n',
             4, 5, 6, '\n',
             7, 8, 9, '\n',
@@ -22,24 +30,15 @@ def poetry(text):
             21, 22, 23, '\n',
             24, 25, '\n',
             26, 27, 28]
-        
+
         for ix in range(29):
-            word = randint(len_text)
+            word = randint(1, len(text))
             words.append(text[word])
 
         for ix in poetry_structure:
             if ix == '\n':
-                complete.append(ix)
+                poetry + ix
             else:
-                complete.append(words[ix])
-    else:
-        print("your image \n does \n not contain enough \n words for a poetry")          
+                poetry + words[ix]
 
-    return complete
-
-for root, dirs, file_names in os.walk(path_img):
-    for file_name in file_names:
-        img = Image.open(path_img + file_name)
-        text = pytesseract.image_to_string(img)
-
-        poetry(text)
+        return poetry
