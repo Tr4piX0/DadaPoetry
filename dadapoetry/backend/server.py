@@ -13,14 +13,17 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 def getDbConnection():
     conn = sqlite3.connect('dada.db')
     conn.row_factory = sqlite3.Row
     return conn
+
 
 @app.route('/', methods=['GET', 'POST'])
 def uploadFile():
@@ -38,8 +41,7 @@ def uploadFile():
             file.save(path)
             conn = getDbConnection()
             conn.execute("INSERT INTO dada (filename, content) VALUES (?, ?)",
-                (filename, path)
-            )
+                         (filename, path))
             conn.close()
             # return redirect(url_for('downloadFile', name=filename))
             return redirect(url_for('downloadFile', name=filename))
@@ -53,10 +55,12 @@ def uploadFile():
     </form>
     '''
 
+
 @app.route('/uploads/<name>')
 def downloadFile(name):
 
     return send_from_directory(app.config["UPLOAD_FOLDER"], name)
+
 
 if __name__ == '__main__':
     app.run(host='localhost', port='8560', debug=True)
