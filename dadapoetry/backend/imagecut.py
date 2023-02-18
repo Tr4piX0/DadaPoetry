@@ -1,14 +1,15 @@
+import psycopg2
+from decouple import config
 from PIL import Image
 from pytesseract import pytesseract
 from random import randint
-import psycopg2
 
 conn = psycopg2.connect(
-    database="db_name",
-    host="db_host",
-    user="db_user",
-    password="db_pass",
-    port="db_port",
+    database=config('db_name'),
+    host=config("db_host"),
+    user=config("db_user"),
+    password=config("db_pass"),
+    port=config("db_port")
 )
 
 poetry_structure = [0, 1, 2, 3, "\n",
